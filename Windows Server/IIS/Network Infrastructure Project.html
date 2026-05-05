@@ -12,7 +12,6 @@
             font-family: 'Trebuchet MS', sans-serif;
             margin: 0;
             line-height: 1.6;
-            text-align: justify;
         }
 
         .container {
@@ -42,6 +41,13 @@
             font-weight: bold;
             border-bottom: 1px solid #2f353d;
             transition: background 0.3s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .arrow {
+            transition: transform 0.3s ease;
         }
 
         .collapsible-header:hover {
@@ -53,6 +59,10 @@
             overflow: hidden;
             transition: max-height 0.4s ease, padding 0.3s ease;
             padding: 0 20px;
+        }
+
+        .collapsible.active .arrow {
+            transform: rotate(180deg);
         }
 
         .collapsible.active .collapsible-content {
@@ -100,7 +110,11 @@
         <p>This project demonstrates how to design, implement, and maintain a structured network using Windows Server, RADIUS, Active Directory (AD), and Network Policy Server (NPS).</p>
 
         <div class="collapsible active">
-            <div class="collapsible-header">Overview</div>
+            <div class="collapsible-header">
+                <span>Overview</span>
+                <span class="arrow">▼</span>
+            </div>
+            
             <div class="collapsible-content">
                 <p>The network consists of two Cisco routers, two Cisco switches, and a MikroTik router used as a Wi-Fi access point. For administration, a Windows 10 Server is used to run AD, RADIUS, and NPS services.</p>
                 <p>Active Directory currently contains two groups: NetWatch (network administrators) and regular users. RADIUS and NPS are used together to authenticate and authorize members of the NetWatch group when accessing Cisco devices. Access is restricted so that NetWatch users can connect via SSH only from designated management network segments (see network topology).</p>
@@ -108,7 +122,10 @@
         </div>
 
         <div class="collapsible">
-            <div class="collapsible-header">Authentication and Authorization</div>
+            <div class="collapsible-header">
+                <span>Authentication and Authorization</span>
+                <span class="arrow">▼</span>
+            </div>
             <div class="collapsible-content">
                 <p>Each Cisco device is registered on the RADIUS server with a pre-shared key. The devices are configured to communicate with the RADIUS server using AAA (authentication, authorization, and accounting), specifically with commands such as "aaa authentication", "aaa authorization", and "aaa group server radius".</p>
                 <p>Each device also has a fallback local account in case the RADIUS server becomes unavailable.</p>
@@ -117,20 +134,26 @@
         </div>
 
         <div class="collapsible">
-            <div class="collapsible-header">Network Design</div>
+            <div class="collapsible-header">
+                <span>Network Design</span>
+                <span class="arrow">▼</span>
+            </div>
             <div class="collapsible-content">
                 <p>Each router has a loopback interface and multiple VLANs configured. OSPF is used for routing between networks, and there is a redundant connection between the two routers.</p>
                 <p>Switches do not use loopback interfaces. Instead, they use the second IP address from VLAN 100, which is designated as the management VLAN. Trunk ports are configured on switches to allow VLAN traffic between different network segments.</p>
                 <p>Currently, the network includes three VLANs: VLAN 10, VLAN 20 (R1 Only), and VLAN 100.</p>
 
                 <div class="image-container">
-                    <img src="Diagram Cisco omprezja IPv4 Public.png" alt="Topology">
+                    <img src="Diagram Cisco omprezja IPv4 Public.png" alt="Topology" loading="lazy">
                 </div>
             </div>
         </div>
 
         <div class="collapsible">
-            <div class="collapsible-header">Wireless and DHCP</div>
+            <div class="collapsible-header">
+                <span>Wireless and DHCP</span>
+                <span class="arrow">▼</span>
+            </div>
             <div class="collapsible-content">
                 <p>The main router (R1) has a configured DHCP pool used for the Wi-Fi network. MikroTik access points (one connected to S1) provide wireless access.</p>
                 <p>Guests can connect using a password and do not have access to internal network services. User authentication via Active Directory for Wi-Fi access and have access to the internal network and services.</p>
@@ -138,7 +161,10 @@
         </div>
 
         <div class="collapsible">
-            <div class="collapsible-header">Additional Services</div>
+            <div class="collapsible-header">
+                <span>Additional Services</span>
+                <span class="arrow">▼</span>
+            </div>
             <div class="collapsible-content">
                 <p>A second server is running TrueNAS and is intended to serve as a backup system for system configs. Currently it runs the following services: SSH, TFTP, SMB. SSH is primarely used for maintenance, TFTP is used to save network device configs and SMB is ment for sharing files (currently the config files for authorized users)</p>
             </div>
@@ -163,8 +189,7 @@
                         section.classList.remove('active');
                     }
                 });
-
-                // Toggle current one
+                
                 current.classList.toggle('active');
             });
         });
