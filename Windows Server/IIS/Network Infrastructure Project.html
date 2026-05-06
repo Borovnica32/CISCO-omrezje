@@ -100,15 +100,25 @@
             border-bottom: 1px solid var(--border);
         }
 
+        img {
+            max-width: 100%;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            margin: 15px auto 0 auto; /* centers horizontally */
+            display: block;           /* required for margin auto to work */
+        }
+
         .card-content {
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.4s ease, padding 0.3s ease;
             padding: 0 15px;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
 
         .card.active .card-content {
-            padding: 15px;
+            padding: 20px;
         }
 
         .arrow {
@@ -264,7 +274,10 @@
     function openCard(card) {
         const content = card.querySelector('.card-content');
         card.classList.add('active');
-        content.style.maxHeight = content.scrollHeight + "px";
+
+        // add extra space so nothing gets visually cut
+        content.style.maxHeight = (content.scrollHeight + 30) + "px";
+
         card.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
@@ -300,6 +313,14 @@
             }
         });
     });
+
+    function updateOpenCardsHeight() {
+        document.querySelectorAll('.card.active .card-content').forEach(content => {
+            content.style.maxHeight = (content.scrollHeight + 20) + "px";
+        });
+    }
+
+    window.addEventListener('resize', updateOpenCardsHeight);
 </script>
 
 </body>
