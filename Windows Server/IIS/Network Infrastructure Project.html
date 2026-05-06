@@ -109,16 +109,15 @@
         }
 
         .card-content {
-            max-height: 0;
+            height: 0;
             overflow: hidden;
-            transition: max-height 0.4s ease, padding 0.3s ease;
+            transition: height 0.35s ease, padding 0.25s ease;
             padding: 0 15px;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
+            display: flow-root; /* keeps margins contained */
         }
 
         .card.active .card-content {
-            padding: 20px;
+            padding: 15px 15px 25px 15px;
         }
 
         .arrow {
@@ -261,66 +260,79 @@
 </div>
 
 <script>
-    const cards = document.querySelectorAll('.card');
-    const links = document.querySelectorAll('.sidebar a');
+const cards = document.querySelectorAll('.card');
+const links = document.querySelectorAll('.sidebar a');
 
-    function closeAllCards() {
-        cards.forEach(c => {
-            c.classList.remove('active');
-            c.querySelector('.card-content').style.maxHeight = null;
-        });
-    }
-
-    function openCard(card) {
-        const content = card.querySelector('.card-content');
-        card.classList.add('active');
-
-        // add extra space so nothing gets visually cut
-        content.style.maxHeight = (content.scrollHeight + 30) + "px";
-
-        card.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-
-    // Sidebar navigation click
-    links.forEach(link => {
-        link.addEventListener('click', (e) => {
-            e.preventDefault();
-            const id = link.getAttribute('href').replace('#', '');
-            const target = document.getElementById(id);
-            if (!target) return;
-
-            closeAllCards();
-            openCard(target);
-        });
-    });
-
-    // Header toggle click
+function closeAllCards() {
     cards.forEach(card => {
-        const header = card.querySelector('.card-header');
         const content = card.querySelector('.card-content');
 
-        if (card.classList.contains('active')) {
-            content.style.maxHeight = content.scrollHeight + "px";
-        }
-
-        header.addEventListener('click', () => {
-            if (!card.classList.contains('active')) {
-                closeAllCards();
-                openCard(card);
-            } else {
-                card.classList.remove('active');
-                content.style.maxHeight = null;
-            }
+        content.style.height = content.scrollHeight + "px"; // set current height
+        requestAnimationFrame(() => {
+            content.style.height = "0px"; // animate closed
         });
+
+        card.classList.remove('active');
+    });
+}
+
+function openCard(card) {
+    const content = card.querySelector('.card-content');
+
+    card.classList.add('active');
+
+    content.style.height = content.scrollHeight + "px";
+
+    // after animation, let it size naturally
+    content.addEventListener('transitionend', function handler() {
+        content.style.height = "auto";
+        content.removeEventListener('transitionend', handler);
     });
 
-    function updateOpenCardsHeight() {
-        document.querySelectorAll('.card.active .card-content').forEach(content => {
-            content.style.maxHeight = (content.scrollHeight + 20) + "px";
+    card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// Sidebar navigation
+links.forEach(link => {
+    link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const id = link.getAttribute('href').replace('#', '');
+        const target = document.getElementById(id);
+        if (!target) return;
+
+        closeAllCards();
+        openCard(target);
+    });
+});
+
+// Header toggle
+cards.forEach(card => {
+    const header = card.querySelector('.card-header');
+    const content = card.querySelector('.card-content');
+
+    // initialize active card
+    if (card.classList.contains('active')) {
+        content.style.height = content.scrollHeight + "px";
+
+        content.addEventListener('transitionend', function handler() {
+            content.style.height = "auto";
+            content.removeEventListener('transitionend', handler);
         });
     }
 
-    window.addEventListener('resize', updateOpenCardsHeight);
+    header.addEventListener('click', () => {
+        if (!card.classList.contains('active')) {
+            closeAllCards();
+            openCard(card);
+        } else {
+            content.style.height = content.scrollHeight + "px";
+            requestAnimationFrame(() => {
+                content.style.height = "0px";
+            });
+            card.classList.remove('active');
+        }
+    });
+});
 </script>
 
 </body>
