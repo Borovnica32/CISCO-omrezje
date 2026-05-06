@@ -6,194 +6,274 @@
     <title>Network Infrastructure Project</title>
 
     <style>
-        body {
-            background-color: #0d1117;
-            color: #ffffff;
-            font-family: 'Trebuchet MS', sans-serif;
-            margin: 0;
-            line-height: 1.6;
+        :root {
+            --bg: #0d1117;
+            --panel: #161b22;
+            --border: #2f353d;
+            --text: #ffffff;
+            --muted: #c9d1d9;
+            --accent: #58a6ff;
         }
 
-        .container {
-            max-width: 900px;
-            margin: auto;
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Trebuchet MS', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            display: flex;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 260px;
+            background: var(--panel);
+            border-right: 1px solid var(--border);
+            height: 100vh;
+            position: fixed;
             padding: 20px;
+            overflow-y: auto;
+        }
+
+        .sidebar h2 {
+            font-size: 16px;
+            margin-bottom: 15px;
+            color: var(--muted);
+        }
+
+        .sidebar a {
+            display: block;
+            color: var(--muted);
+            text-decoration: none;
+            padding: 8px 10px;
+            border-radius: 6px;
+            margin-bottom: 5px;
+            transition: 0.2s;
+        }
+
+        .sidebar a:hover {
+            background: #21262d;
+            color: var(--text);
+        }
+
+        /* MAIN */
+        .main {
+            margin-left: 260px;
+            padding: 30px;
+            width: calc(100% - 260px);
         }
 
         h1 {
-            margin-top: 40px;
-            border-bottom: 1px solid #2f353d;
+            border-bottom: 1px solid var(--border);
             padding-bottom: 10px;
-            font-size: 28px;
+            margin-top: 40px;
         }
 
-        .collapsible {
-            background-color: #161b22;
+        p {
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        /* SECTIONS */
+        .card {
+            background: var(--panel);
+            border: 1px solid var(--border);
             border-radius: 10px;
             margin-top: 20px;
             overflow: hidden;
-            box-shadow: 0 0 10px rgba(0,0,0,0.3);
         }
 
-        .collapsible-header {
-            padding: 15px 20px;
-            cursor: pointer;
+        .card-header {
+            padding: 15px;
             font-weight: bold;
-            border-bottom: 1px solid #2f353d;
-            transition: background 0.3s;
+            cursor: pointer;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .card-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.3s ease;
+            padding: 0 15px;
+        }
+
+        .card.active .card-content {
+            padding: 15px;
         }
 
         .arrow {
             transition: transform 0.3s ease;
         }
 
-        .collapsible-header:hover {
-            background-color: #1f2630;
-        }
-
-        .collapsible-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s ease, padding 0.3s ease;
-            padding: 0 20px;
-        }
-
-        .collapsible.active .arrow {
+        .card.active .arrow {
             transform: rotate(180deg);
-        }
-
-        .collapsible.active .collapsible-content {
-            max-height: 1000px;
-            padding: 15px 20px;
-        }
-
-        p {
-            color: #c9d1d9;
-        }
-
-        .image-container {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
         }
 
         img {
             max-width: 100%;
-            border-radius: 10px;
-            border: 1px solid #2f353d;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            margin-top: 10px;
         }
 
         footer {
-            margin-top: 40px;
+            margin-top: 50px;
             padding: 20px;
-            text-align: center;
-            border-top: 1px solid #2f353d;
+            border-top: 1px solid var(--border);
             color: #8b949e;
-            font-size: 14px;
+            text-align: center;
         }
 
-        @media (max-width: 600px) {
-            h1 {
-                font-size: 22px;
+        /* MOBILE */
+        @media (max-width: 900px) {
+            .sidebar {
+                display: none;
+            }
+
+            .main {
+                margin-left: 0;
+                width: 100%;
             }
         }
     </style>
 </head>
 
 <body>
-    <div class="container">
 
-        <h1>Network Infrastructure Project</h1>
-        <p>This project demonstrates how to design, implement, and maintain a structured network using Windows Server, RADIUS, Active Directory (AD), and Network Policy Server (NPS).</p>
+<div class="sidebar">
+    <h2>Documentation</h2>
+    <a href="#overview">Overview</a>
+    <a href="#auth">Authentication</a>
+    <a href="#design">Network Design</a>
+    <a href="#wireless">Wireless</a>
+    <a href="#services">Services</a>
+</div>
 
-        <div class="collapsible active">
-            <div class="collapsible-header">
-                <span>Overview</span>
-                <span class="arrow">▼</span>
-            </div>
-            
-            <div class="collapsible-content">
-                <p>The network consists of two Cisco routers, two Cisco switches, and a MikroTik router used as a Wi-Fi access point. For administration, a Windows 10 Server is used to run AD, RADIUS, and NPS services.</p>
-                <p>Active Directory currently contains two groups: NetWatch (network administrators) and regular users. RADIUS and NPS are used together to authenticate and authorize members of the NetWatch group when accessing Cisco devices. Access is restricted so that NetWatch users can connect via SSH only from designated management network segments (see network topology).</p>
-            </div>
+<div class="main">
+
+    <h1>Network Infrastructure Project</h1>
+    <p>This project demonstrates how to design, implement, and maintain a structured network using Windows Server, RADIUS, Active Directory (AD), and Network Policy Server (NPS).</p>
+
+    <!-- OVERVIEW -->
+    <div id="overview" class="card active">
+        <div class="card-header">
+            Overview <span class="arrow">▼</span>
         </div>
-
-        <div class="collapsible">
-            <div class="collapsible-header">
-                <span>Authentication and Authorization</span>
-                <span class="arrow">▼</span>
-            </div>
-            <div class="collapsible-content">
-                <p>Each Cisco device is registered on the RADIUS server with a pre-shared key. The devices are configured to communicate with the RADIUS server using AAA (authentication, authorization, and accounting), specifically with commands such as "aaa authentication", "aaa authorization", and "aaa group server radius".</p>
-                <p>Each device also has a fallback local account in case the RADIUS server becomes unavailable.</p>
-                <p>SSH access is restricted using access control lists. Only users from management network segments can connect, and only to specific IP addresses on each device (loopback interfaces for routers or management IPs for switches).</p>
-            </div>
+        <div class="card-content">
+            <p>The network consists of two Cisco routers, two Cisco switches, and a MikroTik router used as a Wi-Fi access point. For administration, a Windows 10 Server is used to run AD, RADIUS, and NPS services.</p>
+            <p>Active Directory currently contains two groups: NetWatch (network administrators) and regular users. RADIUS and NPS are used together to authenticate and authorize members of the NetWatch group when accessing Cisco devices. Access is restricted so that NetWatch users can connect via SSH only from designated management network segments (see network topology).</p>
         </div>
+    </div>
 
-        <div class="collapsible">
-            <div class="collapsible-header">
-                <span>Network Design</span>
-                <span class="arrow">▼</span>
-            </div>
-            <div class="collapsible-content">
-                <p>Each router has a loopback interface and multiple VLANs configured. OSPF is used for routing between networks, and there is a redundant connection between the two routers.</p>
-                <p>Switches do not use loopback interfaces. Instead, they use the second IP address from VLAN 100, which is designated as the management VLAN. Trunk ports are configured on switches to allow VLAN traffic between different network segments.</p>
-                <p>Currently, the network includes three VLANs: VLAN 10, VLAN 20 (R1 Only), and VLAN 100.</p>
-
-                <div class="image-container">
-                    <img src="Diagram Cisco omprezja IPv4 Public.png" alt="Topology" loading="lazy">
-                </div>
-            </div>
+    <!-- AUTH -->
+    <div id="auth" class="card">
+        <div class="card-header">
+            Authentication <span class="arrow">▼</span>
         </div>
-
-        <div class="collapsible">
-            <div class="collapsible-header">
-                <span>Wireless and DHCP</span>
-                <span class="arrow">▼</span>
-            </div>
-            <div class="collapsible-content">
-                <p>The main router (R1) has a configured DHCP pool used for the Wi-Fi network. MikroTik access points (one connected to S1) provide wireless access.</p>
-                <p>Guests can connect using a password and do not have access to internal network services. User authentication via Active Directory for Wi-Fi access and have access to the internal network and services.</p>
-            </div>
+        <div class="card-content">
+            <p>Each Cisco device is registered on the RADIUS server with a pre-shared key. The devices are configured to communicate with the RADIUS server using AAA (authentication, authorization, and accounting), specifically with commands such as "aaa authentication", "aaa authorization", and "aaa group server radius".</p>
+            <p>Each device also has a fallback local account in case the RADIUS server becomes unavailable.</p>
+            <p>SSH access is restricted using access control lists. Only users from management network segments can connect, and only to specific IP addresses on each device (loopback interfaces for routers or management IPs for switches).</p>
         </div>
+    </div>
 
-        <div class="collapsible">
-            <div class="collapsible-header">
-                <span>Additional Services</span>
-                <span class="arrow">▼</span>
-            </div>
-            <div class="collapsible-content">
-                <p>A second server is running TrueNAS and is intended to serve as a backup system for system configs. Currently it runs the following services: SSH, TFTP, SMB. SSH is primarely used for maintenance, TFTP is used to save network device configs and SMB is ment for sharing files (currently the config files for authorized users)</p>
-            </div>
+    <!-- DESIGN -->
+    <div id="design" class="card">
+        <div class="card-header">
+            Network Design <span class="arrow">▼</span>
         </div>
+        <div class="card-content">
+            <p>Each router has a loopback interface and multiple VLANs configured. OSPF is used for routing between networks, and there is a redundant connection between the two routers.</p>
+            <p>Switches do not use loopback interfaces. Instead, they use the second IP address from VLAN 100, which is designated as the management VLAN. Trunk ports are configured on switches to allow VLAN traffic between different network segments.</p>
+            <p>Currently, the network includes three VLANs: VLAN 10, VLAN 20 (R1 Only), and VLAN 100.</p>
+            <img src="Diagram Cisco omprezja IPv4 Public.png" alt="Topology">
+        </div>
+    </div>
 
+    <!-- WIRELESS -->
+    <div id="wireless" class="card">
+        <div class="card-header">
+            Wireless & DHCP <span class="arrow">▼</span>
+        </div>
+        <div class="card-content">
+            <p>The main router (R1) has a configured DHCP pool used for the Wi-Fi network. MikroTik access points (one connected to S1) provide wireless access.</p>
+            <p>Guests can connect using a password and do not have access to internal network services. User authentication via Active Directory for Wi-Fi access and have access to the internal network and services.</p>
+        </div>
+    </div>
+
+    <!-- SERVICES -->
+    <div id="services" class="card">
+        <div class="card-header">
+            Additional Services <span class="arrow">▼</span>
+        </div>
+        <div class="card-content">
+            <p>A second server is running TrueNAS and is intended to serve as a backup system for system configs. Currently it runs the following services: SSH, TFTP, SMB. SSH is primarely used for maintenance, TFTP is used to save network device configs and SMB is ment for sharing files (currently the config files for authorized users)</p>
+        </div>
     </div>
 
     <footer>
-        © 2026 Network Infrastructure Project | Built for learning and demonstration | Created By: Zver Industries est. 2026
+        © 2026 Network Infrastructure Project | Created By: Zver Industries est. 2026
     </footer>
 
-    <script>
-        const headers = document.querySelectorAll('.collapsible-header');
+</div>
 
-        headers.forEach(header => {
-            header.addEventListener('click', () => {
-                const current = header.parentElement;
+<script>
+    const cards = document.querySelectorAll('.card');
+    const links = document.querySelectorAll('.sidebar a');
 
-                // Close all sections
-                document.querySelectorAll('.collapsible').forEach(section => {
-                    if (section !== current) {
-                        section.classList.remove('active');
-                    }
-                });
-                
-                current.classList.toggle('active');
-            });
+    function closeAllCards() {
+        cards.forEach(c => {
+            c.classList.remove('active');
+            c.querySelector('.card-content').style.maxHeight = null;
         });
-    </script>
+    }
+
+    function openCard(card) {
+        const content = card.querySelector('.card-content');
+        card.classList.add('active');
+        content.style.maxHeight = content.scrollHeight + "px";
+        card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // Sidebar navigation click
+    links.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const id = link.getAttribute('href').replace('#', '');
+            const target = document.getElementById(id);
+            if (!target) return;
+
+            closeAllCards();
+            openCard(target);
+        });
+    });
+
+    // Header toggle click
+    cards.forEach(card => {
+        const header = card.querySelector('.card-header');
+        const content = card.querySelector('.card-content');
+
+        if (card.classList.contains('active')) {
+            content.style.maxHeight = content.scrollHeight + "px";
+        }
+
+        header.addEventListener('click', () => {
+            if (!card.classList.contains('active')) {
+                closeAllCards();
+                openCard(card);
+            } else {
+                card.classList.remove('active');
+                content.style.maxHeight = null;
+            }
+        });
+    });
+</script>
 
 </body>
 </html>
