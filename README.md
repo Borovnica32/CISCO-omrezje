@@ -57,5 +57,4 @@ Guests can connect using a password and do not have access to internal network s
 
 
 # Additional Services
-
-A second server is running TrueNAS and is intended to serve as a backup system for system configs. Currently it runs the following services: SSH, TFTP, SMB. SSH is primarely used for maintenance, TFTP is used to save network device configs and SMB is ment for sharing files (currently the config files for authorized users)
+Foe aditional services as mentionde before are TrueNAS witch is running TFTP server for configuration backups withc are automaticly savet to he TFTP server when "write memory" is ran on a switch or router (see config files), SMB for sharing these backups (only fmanagement personel) and SSH access for management personel. On Windows Server there is a aditional service running witch is the Internet Information Service (IIS) witch hosts a website where a copy of this documentation is displayed
