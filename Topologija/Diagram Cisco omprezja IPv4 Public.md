@@ -7,7 +7,7 @@
 |                                             +---------------------------------+                                             |
 | Sub-Int 100 (0/0.100): 192.168.102.1/24     |                                 | Sub-Int 100 (Gig0/0.100): 192.168.101.1/24  |
 | PtP (Gig0/1): 192.168.200.2/24              |                                 | PtP (Gig0/1): 192.168.200.1/24              |
-| Redundancy (Gig 0/2): 192.168.201.2/24      |                                 | Redundancy (Gig 0/2): 192.168.201.2/24      |
+| Redundancy (Gig 0/2): 192.168.201.2/24      |                                 | Redundancy (Gig 0/2): 192.168.201.1/24      |
 |                                             |                                 |                                             |
 | OSPF:                                       |                                 | OSPF:                                       |
 |  passive-interface GigabitEthernet0/0.10    |                                 |  passive-interface GigabitEthernet0/0.10    |
