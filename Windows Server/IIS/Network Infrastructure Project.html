@@ -8,8 +8,8 @@
     <title>Network Infrastructure Project</title>
 </head>
 
-<body>
-
+<body class="dark">
+<div class="theme-fade" id="themeFade"></div>
 <div class="sidebar">
     <h2>Documentation</h2>
     <a href="#overview">Overview</a>
@@ -17,6 +17,8 @@
     <a href="#design">Network Design</a>
     <a href="#wireless">Wireless</a>
     <a href="#services">Services</a>
+
+    <button id="themeToggle" class="theme-toggle">🌙 Dark Mode</button>
 </div>
 
 <div class="main">
@@ -73,6 +75,7 @@
             </ul>
             
             <img src="Diagram Cisco omprezja IPv4 Public.png" alt="Topology">
+            
         </div>
     </div>
 
@@ -99,6 +102,8 @@
         </div>
     </div>
 
+    
+
     <footer>
         <p>© 2026 Network Infrastructure Project | Created by Zver Industries est. 2026</p>
         <a href="https://github.com/Borovnica32/Network-Infrastructure-Project">GitHub repository</a>
@@ -107,80 +112,114 @@
 </div>
 
 <script>
-const cards = document.querySelectorAll('.card');
-const links = document.querySelectorAll('.sidebar a');
+    const cards = document.querySelectorAll('.card');
+    const links = document.querySelectorAll('.sidebar a');
 
-function closeAllCards() {
-    cards.forEach(card => {
-        const content = card.querySelector('.card-content');
+    function closeAllCards() {
+        cards.forEach(card => {
+            const content = card.querySelector('.card-content');
 
-        content.style.height = content.scrollHeight + "px"; // set current height
-        requestAnimationFrame(() => {
-            content.style.height = "0px"; // animate closed
-        });
+            content.style.height = content.scrollHeight + "px"; // set current height
+            requestAnimationFrame(() => {
+                content.style.height = "0px"; // animate closed
+            });
 
-        card.classList.remove('active');
-    });
-}
-
-function openCard(card) {
-    const content = card.querySelector('.card-content');
-
-    card.classList.add('active');
-
-    content.style.height = content.scrollHeight + "px";
-
-    // after animation, let it size naturally
-    content.addEventListener('transitionend', function handler() {
-        content.style.height = "auto";
-        content.removeEventListener('transitionend', handler);
-    });
-
-    card.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-
-// Sidebar navigation
-links.forEach(link => {
-    link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const id = link.getAttribute('href').replace('#', '');
-        const target = document.getElementById(id);
-        if (!target) return;
-
-        closeAllCards();
-        openCard(target);
-    });
-});
-
-// Header toggle
-cards.forEach(card => {
-    const header = card.querySelector('.card-header');
-    const content = card.querySelector('.card-content');
-
-    // initialize active card
-    if (card.classList.contains('active')) {
-        content.style.height = content.scrollHeight + "px";
-
-        content.addEventListener('transitionend', function handler() {
-            content.style.height = "auto";
-            content.removeEventListener('transitionend', handler);
+            card.classList.remove('active');
         });
     }
 
-    header.addEventListener('click', () => {
-        if (!card.classList.contains('active')) {
-            closeAllCards();
-            openCard(card);
-        } else {
+    function openCard(card) {
+        const content = card.querySelector('.card-content');
+
+        card.classList.add('active');
+
+        // reset first so browser recalculates correctly
+        content.style.height = "0px";
+
+        requestAnimationFrame(() => {
             content.style.height = content.scrollHeight + "px";
-            requestAnimationFrame(() => {
-                content.style.height = "0px";
+        });
+
+        card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // Sidebar navigation
+    links.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const id = link.getAttribute('href').replace('#', '');
+            const target = document.getElementById(id);
+            if (!target) return;
+
+            closeAllCards();
+            openCard(target);
+        });
+    });
+
+    // Header toggle
+    cards.forEach(card => {
+        const header = card.querySelector('.card-header');
+        const content = card.querySelector('.card-content');
+
+        // initialize active card
+        if (card.classList.contains('active')) {
+            content.style.height = content.scrollHeight + "px";
+
+            content.addEventListener('transitionend', function handler() {
+                content.style.height = "auto";
+                content.removeEventListener('transitionend', handler);
             });
-            card.classList.remove('active');
+        }
+
+        header.addEventListener('click', () => {
+            if (!card.classList.contains('active')) {
+                closeAllCards();
+                openCard(card);
+            } else {
+                content.style.height = content.scrollHeight + "px";
+                requestAnimationFrame(() => {
+                    content.style.height = "0px";
+                });
+                card.classList.remove('active');
+            }
+        });
+    });
+
+
+    const toggleBtn = document.getElementById("themeToggle");
+    const body = document.body;
+
+    // Load saved theme
+    if (localStorage.getItem("theme") === "dark") {
+        body.classList.add("dark");
+        toggleBtn.textContent = "☀️ Light Mode";
+    }
+
+    // Toggle theme
+    toggleBtn.addEventListener("click", () => {
+        body.classList.toggle("dark");
+
+        if (body.classList.contains("dark")) {
+            toggleBtn.textContent = "☀️ Light Mode";
+            localStorage.setItem("theme", "dark");
+        } else {
+            toggleBtn.textContent = "🌙 Dark Mode";
+            localStorage.setItem("theme", "light");
         }
     });
-});
+
+    const savedTheme = localStorage.getItem("theme");
+
+    if (savedTheme === "light"){
+        document.body.classList.remove("dark");
+    }else{
+        document.body.classList.add("dark");
+        localStorage.setItem("theme", "dark");
+    }
+
 </script>
 
 </body>
 </html>
+
+
