@@ -42,7 +42,7 @@ Currently, the network includes three VLANs: VLAN 10, VLAN 20 (R1 Only), and VLA
 
 
 
-![Network Topology](./Topologija/Diagram%20Cisco%20omprezja%20IPv4%20Public.png)
+
 
 
 
