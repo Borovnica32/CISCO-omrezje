@@ -41,7 +41,7 @@ Currently, the network includes three VLANs: VLAN 10, VLAN 20 (R1 Only), and VLA
   - VLAN 100 is used by managment, all administrative users are in this segment (IT)
 
 
-
+![Network Topology](./Topologija/Diagram%20Cisco%20omprezja%20IPv4%20Public.png)
 
 
 
