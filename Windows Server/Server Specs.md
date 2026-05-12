@@ -3,7 +3,7 @@
 At the time of writing this the Windows Server operated as the RADIUS Server with the addition of NPS and DS - AD.
 
 In addition the server has some extra software instlled:
-    * Wireshark,
+* Wireshark,
     * Git,
     * VSC,
     * Putty,
