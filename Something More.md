@@ -6,12 +6,12 @@ The WI-FI part of the project would be disconnected due to safty conserns and no
 
 Before the launch of this setup backups will have to be made in order to secure valid configuration of devices in case of critical faliour
 Backups will have to include:
-    - Ciso device OS backups
-    - Config files for Cisco devices
-    - Windows Server backup
-    - TrueNAS backup
-    - MikroTik devices OS backups
-    - Config files for MikroTik devices
+* Ciso device OS backups
+* Config files for Cisco devices
+* Windows Server backup
+* TrueNAS backup
+* MikroTik devices OS backups
+* Config files for MikroTik devices
 
 In addition to backups monitoring tools like WIreshark wil have to be installed on Window Server to monitor the AI network trafic
 
@@ -24,6 +24,6 @@ Valid backups have to be safly stored on a offsite system (GutHub) to secure the
 # Due to safty conserns phisical access will have to be limited to secure critical infrastructure and to maintain the isolated environment, only authorized personel may interact with the environment
 
 Before the actual implementation some aditional resources willhave to be secured:
-    - Increese RAM capacity for Windiws Server to maintain higher RAM demand when the AI model is installed and running (MAX RAM: 32 GB of DDR3-1600 SDRAM)
-    - Install a new network card on Windows Server (MIN 2x RJ-45 port card)
-    - Secure aditional disks for Windows Server and TrueNAS device to maintain data integrity and to mintain and store log files an relevant data (Not as imortaint as the Windows Server upgrade)
+* Increese RAM capacity for Windiws Server to maintain higher RAM demand when the AI model is installed and running (MAX RAM: 32 GB of DDR3-1600 SDRAM)
+* Install a new network card on Windows Server (MIN 2x RJ-45 port card)
+* Secure aditional disks for Windows Server and TrueNAS device to maintain data integrity and to mintain and store log files an relevant data (Not as imortaint as the Windows Server upgrade)
