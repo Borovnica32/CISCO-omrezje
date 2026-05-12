@@ -4,8 +4,10 @@ At the time of writing this the Windows Server operated as the RADIUS Server wit
 
 In addition the server has some extra software instlled:
     - Wireshark,
-    - NXLog,
-    - TFTPd64
+    - Git,
+    - VSC,
+    - Putty,
+    - WinBox
 
 Server Hardware:
     - HP EliteDesk 800 G1 SFF:
