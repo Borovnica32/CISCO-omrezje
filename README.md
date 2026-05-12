@@ -1,60 +1,126 @@
 # Network Infrastructure Project
 
-This project demonstrates how to design, implement, and maintain a structured network using Windows Server, RADIUS, Active Directory (AD), Network Policy Server (NPS), Domain Controller (DC) in adition with TrueNas Storage server and advanced configurations of Cisco devices (Routers and Switches) and MikroTik HAP routers used as Access Points (AP) for WI-FI
+This project demonstrates the design, implementation, and maintenance of a structured enterprise-style network environment using multiple technologies and platforms. The infrastructure integrates Windows Server services, Cisco networking equipment, MikroTik wireless access points, a TrueNAS storage server, and a Fedora Server running the Elastic Stack for centralized logging and monitoring.
+
+The environment includes:
+
+* Windows Server with Active Directory (AD), RADIUS, Network Policy Server (NPS), and Domain Controller (DC) services
+* Cisco routers and switches with advanced configurations
+* MikroTik hAP routers configured as wireless access points
+* TrueNAS storage for centralized backups and file sharing
+* Fedora Server integrated with Active Directory and running Elastic Stack
+
+---
 
 # Overview
 
-The networ consists of two Cisco 2900 routers witch are connected to each other wia a main ethernet line and a redundent line also, on each router there is one Cisco switch (Catalyst 2960 switch). On one end of the network there is a Windows Server and a MikroTik AP (look at the topology) and in the other end there is a TrueNAS Storage server.
+The network consists of two Cisco 2900 series routers connected through both a primary Ethernet link and a redundant backup link to ensure high availability. Each router is connected to a Cisco Catalyst 2960 switch.
 
+On one side of the network, a Windows Server and a MikroTik access point are connected, while the opposite side hosts the TrueNAS storage server. A Fedora Server is also integrated into the infrastructure for centralized log collection and analysis.
 
-on the Windows Server there is a running AD witchcurrently contains two groups: netWatch (network administrators) and regular users. RADIUS and NPS are used together to authenticate and authorize members of the netWatch group when accessing Cisco devices. Access is restricted so that netWatch users can connect via SSH only from designated management network segments (see network topology) they connect with their AD username and their password.
+The Windows Server hosts an Active Directory environment that currently contains two security groups:
 
+* **netWatch** – network administrators
+* **Regular Users** – standard domain users
 
+RADIUS and NPS are integrated with Active Directory to authenticate and authorize members of the **netWatch** group when accessing Cisco network devices. Administrative access is restricted so that authorized users can connect only through designated management network segments using their Active Directory credentials over SSH.
+
+The Fedora Server is joined to the Active Directory domain, allowing members of the **netWatch** group to receive administrative (root/sudo) privileges. The server currently runs the Elastic Stack for centralized logging and monitoring.
+
+---
 
 # Authentication and Authorization
 
-Each Cisco device is registered on the RADIUS server with a pre-shared key. The devices are configured to communicate with the RADIUS server using AAA (authentication, authorization, and accounting), specifically with commands such as "aaa authentication", "aaa authorization", and "aaa group server radius".
+Each Cisco device is registered on the RADIUS server using a pre-shared key. Devices communicate with the RADIUS server through Cisco AAA (Authentication, Authorization, and Accounting) services using configurations such as:
 
+* `aaa authentication`
+* `aaa authorization`
+* `aaa accounting`
+* `aaa group server radius`
 
+To ensure reliability, every device also contains a fallback local administrator account. If the RADIUS server becomes unavailable, administrators can still access devices through physical console connections using a console cable.
 
-Each device also has a fallback local account in case the RADIUS server becomes unavailable, if this happenes the user has to have physical access to the devices and has to connect using a console cable.
+SSH access is additionally protected with Access Control Lists (ACLs). Only hosts within authorized management network segments can establish SSH sessions, and access is limited to specific management IP addresses such as router loopback interfaces or switch management VLAN addresses.
 
-
-
-SSH access is restricted using access control lists. Only users from management network segments can connect, and only to specific IP addresses on each device (loopback interfaces for routers or management IPs for switches).
-
-
+---
 
 # Network Design
 
-Each router has a loopback interface and multiple VLANs configured. OSPF is used for routing between networks, and there is a redundant connection between the two routers, for security vlan interfaces have been set up as passive-interfaces to prevent rouge routers from being connected and astablishing a neighbouring connection.
+Each router contains:
 
+* Multiple VLAN interfaces
+* A dedicated loopback interface for management
+* OSPF dynamic routing configuration
 
+OSPF is used to provide routing between all network segments. A redundant connection between routers ensures continued connectivity in the event of a link failure.
 
-As mentioned before switches do not use loopback interfaces. Instead, they use the second IP address from VLAN 100, which is designated as the management VLAN. Trunk ports are configured on switches to allow VLAN traffic between different network segments.
+For additional security, VLAN interfaces participating in OSPF are configured as **passive interfaces**, preventing unauthorized or rogue devices from forming OSPF neighbor relationships.
 
+Switches do not use loopback interfaces. Instead, management access is provided through the second IP address within **VLAN 100**, which serves as the dedicated management VLAN.
 
+Trunk ports are configured between switches and routers to transport VLAN traffic across the infrastructure.
 
-Currently, the network includes three VLANs: VLAN 10, VLAN 20 (R1 Only), and VLAN 100.
-  - VLAN 10 is used for connecting regular devices (PC, Laptops etc.)
-  - VLAN 20 (R1 only) is used for WI-FI conectivity (Mobile devices)
-  - VLAN 100 is used by managment, all administrative users are in this segment (IT)
+The network currently contains three VLANs:
 
+* **VLAN 10** – General user devices (PCs, laptops, workstations)
+* **VLAN 20** *(R1 only)* – Wireless/Wi-Fi client devices
+* **VLAN 100** – Management network for IT administrators
 
 ![Network Topology](./Topologija/Diagram%20Cisco%20omprezja%20IPv4%20Public.png)
 
+---
 
+# Wireless Networking and DHCP
 
+The primary router (R1) provides DHCP services for the wireless network. Wireless connectivity is delivered through MikroTik access points connected to switch S1.
 
-# Wireless and DHCP
+The wireless infrastructure integrates with RADIUS and Active Directory authentication, requiring users to authenticate using their AD username and password before gaining access to internal services.
 
-For WI-FI access the main router (R1) has a configured DHCP pool used for the Wi-Fi network. For actual WI-FI a MikroTik access points (one connected to S1) provide wireless access and is a s all other devices registered with RADIUS, for security the WI-FI requieres login with AD credentials password and username.
+Two wireless access modes are available:
 
+* **Guest Access** – password-based access with restricted network permissions
+* **Authenticated User Access** – Active Directory authentication with access to internal network resources and services
 
+This setup provides secure centralized authentication while separating guest traffic from internal enterprise resources.
 
-Guests can connect using a password and do not have access to internal network services. User authentication via Active Directory for Wi-Fi access and have access to the internal network and services.
-
-
+---
 
 # Additional Services
-For aditional services as mentionde before are TrueNAS witch is running TFTP server for configuration backups withc are automaticly savet to he TFTP server when "write memory" is ran on a switch or router (see config files), SMB for sharing these backups (only fmanagement personel) and SSH access for management personel. On Windows Server there is a aditional service running witch is the Internet Information Service (IIS) witch hosts a website where a copy of this documentation is displayed
+
+## TrueNAS Server
+
+The TrueNAS server provides several infrastructure services, including:
+
+* **TFTP server** for automated Cisco configuration backups
+* **SMB file sharing** for backup storage access
+* **SSH management access** for administrators
+
+Cisco devices are configured to automatically save configuration backups to the TFTP server whenever the `write memory` command is executed.
+
+Access to backup files is restricted to authorized management personnel.
+
+---
+
+## Windows Server Services
+
+In addition to Active Directory and RADIUS services, the Windows Server also hosts:
+
+* **Internet Information Services (IIS)**
+
+The IIS web server hosts a local website containing a copy of this project documentation.
+
+---
+
+## Fedora Server and Elastic Stack
+
+The Fedora Server is integrated into the Active Directory domain and provides centralized monitoring and log analysis using the Elastic Stack.
+
+The Elastic Stack is used for:
+
+* Centralized log collection
+* Device monitoring
+* Event analysis
+* Network troubleshooting
+* Security monitoring
+
+Logs from network devices and servers are forwarded to the Elastic Stack environment for analysis and visualization.
