@@ -10,7 +10,7 @@ The environment includes:
 * TrueNAS storage for centralized backups and file sharing
 * Fedora Server integrated with Active Directory and running Elastic Stack
 
----
+
 
 # Overview
 
@@ -27,7 +27,7 @@ RADIUS and NPS are integrated with Active Directory to authenticate and authoriz
 
 The Fedora Server is joined to the Active Directory domain, allowing members of the **netWatch** group to receive administrative (root/sudo) privileges. The server currently runs the Elastic Stack for centralized logging and monitoring.
 
----
+
 
 # Authentication and Authorization
 
@@ -42,7 +42,7 @@ To ensure reliability, every device also contains a fallback local administrator
 
 SSH access is additionally protected with Access Control Lists (ACLs). Only hosts within authorized management network segments can establish SSH sessions, and access is limited to specific management IP addresses such as router loopback interfaces or switch management VLAN addresses.
 
----
+
 
 # Network Design
 
@@ -68,7 +68,7 @@ The network currently contains three VLANs:
 
 ![Network Topology](./Topologija/Diagram%20Cisco%20omprezja%20IPv4%20Public.png)
 
----
+
 
 # Wireless Networking and DHCP
 
@@ -83,7 +83,7 @@ Two wireless access modes are available:
 
 This setup provides secure centralized authentication while separating guest traffic from internal enterprise resources.
 
----
+
 
 # Additional Services
 
@@ -99,7 +99,7 @@ Cisco devices are configured to automatically save configuration backups to the 
 
 Access to backup files is restricted to authorized management personnel.
 
----
+
 
 ## Windows Server Services
 
@@ -109,7 +109,7 @@ In addition to Active Directory and RADIUS services, the Windows Server also hos
 
 The IIS web server hosts a local website containing a copy of this project documentation.
 
----
+
 
 ## Fedora Server and Elastic Stack
 
