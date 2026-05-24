@@ -120,10 +120,11 @@ The Elastic Stack is used for:
 * Centralized log collection
 * Device monitoring
 * Event analysis
-
-
-# This project is completly offline so no data can leak from it and that is why passwords can be seen in the uploaded files (basicly noone except me can acces this project)
 * Network troubleshooting
 * Security monitoring
 
 Logs from network devices and servers are forwarded to the Elastic Stack environment for analysis and visualization.
+
+
+
+# This project is completly offline so no data can leak from it and that is why passwords can be seen in the uploaded files (basicly noone except me can acces this project)
